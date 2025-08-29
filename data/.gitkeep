@@ -1,0 +1,2 @@
+# This file ensures the data directory is kept in git
+# The actual data files (data.json, data.sqlite) are ignored by .gitignore
