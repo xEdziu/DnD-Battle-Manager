@@ -1,0 +1,40 @@
+# Data files - don't commit database files
+data.json
+data.sqlite
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+error.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# PHP specific
+composer.phar
+vendor/
+.env
+
+# Backup files
+*.backup
+*_backup.*
+*.bak
+
+# Cache files
+cache/
+tmp/

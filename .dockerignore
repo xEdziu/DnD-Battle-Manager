@@ -1,0 +1,23 @@
+# Don't copy these files to Docker image
+.git
+.gitignore
+README.md
+.vscode
+.idea
+*.log
+.DS_Store
+Thumbs.db
+
+# Don't copy existing data files - let Docker create fresh ones
+data.json
+data.sqlite
+
+# Don't copy backup files
+*_backup.*
+*.backup
+*.bak
+
+# Docker files themselves
+Dockerfile
+dockerfile
+.dockerignore
