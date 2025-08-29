@@ -1,0 +1,17 @@
+services:
+  dnd-battle-manager:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      # Mount data directory to persist SQLite database
+      - ./data:/var/www/html/data
+    environment:
+      - APACHE_DOCUMENT_ROOT=/var/www/html
+    restart: unless-stopped
+    container_name: dnd-battle-manager
+
+# Optional: Add a volume for persistent data
+volumes:
+  dnd_data:
+    driver: local

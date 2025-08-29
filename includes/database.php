@@ -22,7 +22,13 @@ class Database
     private function connect()
     {
         $initNewDb = !file_exists(DB_FILE);
-        $this->db = new SQLite3(DB_FILE);
+        
+        try {
+            $this->db = new SQLite3(DB_FILE);
+        } catch (Exception $e) {
+            error_log("Failed to connect to SQLite database: " . $e->getMessage());
+            throw $e;
+        }
 
         // Performance optimizations
         $this->db->exec('PRAGMA foreign_keys = ON');
@@ -34,7 +40,13 @@ class Database
         if ($initNewDb) {
             $this->createTables();
         } else {
-            $this->migrateDatabase();
+            // Check if tables exist, if not create them
+            $result = $this->db->query("SELECT name FROM sqlite_master WHERE type='table' AND name='battles'");
+            if (!$result->fetchArray()) {
+                $this->createTables();
+            } else {
+                $this->migrateDatabase();
+            }
         }
     }
 
@@ -224,96 +236,92 @@ class Database
 
     private function createTables()
     {
-        $this->db->exec('
-            CREATE TABLE IF NOT EXISTS presets (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT,
-                str INTEGER,
-                dex INTEGER,
-                con INTEGER,
-                int INTEGER,
-                wis INTEGER,
-                cha INTEGER,
-                ac INTEGER,
-                hp TEXT,
-                passive INTEGER,
-                skills TEXT,
-                actions TEXT,
-                notes TEXT,
-                character_type TEXT DEFAULT "npc"
-            );
-        ');
+        try {
+            // Create badges table first
+            $this->db->exec('
+                CREATE TABLE IF NOT EXISTS badges (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT NOT NULL,
+                    color TEXT NOT NULL DEFAULT "blue",
+                    icon TEXT NOT NULL DEFAULT "zap",
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                );
+            ');
 
-        $this->db->exec('
-            CREATE TABLE IF NOT EXISTS battles (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT,
-                description TEXT DEFAULT "",
-                badge_id INTEGER DEFAULT NULL,
-                FOREIGN KEY (badge_id) REFERENCES badges(id)
-            );
-        ');
+            // Insert default badges
+            $this->db->exec('
+                INSERT OR IGNORE INTO badges (id, name, color, icon) VALUES
+                (1, "Active Battle", "gold", "zap"),
+                (2, "Boss Fight", "crimson", "crown"),
+                (3, "Random Encounter", "emerald", "shuffle"),
+                (4, "Important", "royal", "star"),
+                (5, "In Progress", "stone", "clock"),
+                (6, "Completed", "gray", "check-circle")
+            ');
 
-        $this->db->exec('
-            CREATE TABLE IF NOT EXISTS participants (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                battle_id INTEGER,
-                name TEXT,
-                str INTEGER,
-                dex INTEGER,
-                con INTEGER,
-                int INTEGER,
-                wis INTEGER,
-                cha INTEGER,
-                ac INTEGER,
-                hp_current INTEGER,
-                hp_max INTEGER,
-                passive INTEGER,
-                skills TEXT,
-                actions TEXT,
-                notes TEXT,
-                initiative INTEGER DEFAULT 0
-            );
-        ');
+            $this->db->exec('
+                CREATE TABLE IF NOT EXISTS presets (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT,
+                    str INTEGER,
+                    dex INTEGER,
+                    con INTEGER,
+                    int INTEGER,
+                    wis INTEGER,
+                    cha INTEGER,
+                    ac INTEGER,
+                    hp TEXT,
+                    passive INTEGER,
+                    skills TEXT,
+                    actions TEXT,
+                    notes TEXT,
+                    character_type TEXT DEFAULT "npc"
+                );
+            ');
 
-        $this->db->exec('
-            CREATE TABLE IF NOT EXISTS badges (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
-                color TEXT NOT NULL DEFAULT "blue",
-                icon TEXT NOT NULL DEFAULT "zap",
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            );
-        ');
+            $this->db->exec('
+                CREATE TABLE IF NOT EXISTS battles (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT,
+                    description TEXT DEFAULT "",
+                    badge_id INTEGER DEFAULT NULL,
+                    FOREIGN KEY (badge_id) REFERENCES badges(id)
+                );
+            ');
 
-        // Insert default badges
-        $this->db->exec('
-            INSERT OR IGNORE INTO badges (id, name, color, icon) VALUES
-            (1, "Active Battle", "gold", "zap"),
-            (2, "Boss Fight", "crimson", "crown"),
-            (3, "Random Encounter", "emerald", "shuffle"),
-            (4, "Important", "royal", "star"),
-            (5, "In Progress", "stone", "clock"),
-            (6, "Completed", "gray", "check-circle")
-        ');
+            $this->db->exec('
+                CREATE TABLE IF NOT EXISTS participants (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    battle_id INTEGER,
+                    name TEXT,
+                    str INTEGER,
+                    dex INTEGER,
+                    con INTEGER,
+                    int INTEGER,
+                    wis INTEGER,
+                    cha INTEGER,
+                    ac INTEGER,
+                    hp_current INTEGER,
+                    hp_max INTEGER,
+                    passive INTEGER,
+                    skills TEXT,
+                    actions TEXT,
+                    notes TEXT,
+                    initiative INTEGER DEFAULT 0,
+                    character_type TEXT DEFAULT "enemy"
+                );
+            ');
 
-        // Create indexes for better performance
-        $this->db->exec('CREATE INDEX IF NOT EXISTS idx_participants_battle_id ON participants(battle_id)');
-        $this->db->exec('CREATE INDEX IF NOT EXISTS idx_participants_initiative ON participants(battle_id, initiative DESC)');
-        $this->db->exec('CREATE INDEX IF NOT EXISTS idx_battles_badge_id ON battles(badge_id)');
+            // Create indexes for better performance
+            $this->db->exec('CREATE INDEX IF NOT EXISTS idx_participants_battle_id ON participants(battle_id)');
+            $this->db->exec('CREATE INDEX IF NOT EXISTS idx_participants_initiative ON participants(battle_id, initiative DESC)');
+            $this->db->exec('CREATE INDEX IF NOT EXISTS idx_battles_badge_id ON battles(badge_id)');
+            $this->db->exec('CREATE INDEX IF NOT EXISTS idx_presets_character_type ON presets(character_type)');
+            $this->db->exec('CREATE INDEX IF NOT EXISTS idx_participants_character_type ON participants(character_type)');
 
-        // Migration: Add character_type to participants table
-        $result = $this->db->query("PRAGMA table_info(participants)");
-        $hasCharacterType = false;
-        while ($row = $result->fetchArray()) {
-            if ($row['name'] === 'character_type') {
-                $hasCharacterType = true;
-                break;
-            }
-        }
-
-        if (!$hasCharacterType) {
-            $this->db->exec('ALTER TABLE participants ADD COLUMN character_type TEXT DEFAULT "enemy"');
+        } catch (Exception $e) {
+            error_log("Failed to create database tables: " . $e->getMessage());
+            throw $e;
         }
     }
 

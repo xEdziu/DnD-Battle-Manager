@@ -82,7 +82,8 @@ function getDefaultPresets()
             'passive' => 11,
             'skills' => 'Athletics +4, Perception +3',
             'actions' => 'Longsword (melee attack +5, 1d8+2 slashing); Light Crossbow (ranged attack +3, 1d8+1 piercing)',
-            'notes' => 'Human Fighter, Level 3'
+            'notes' => 'Human Fighter, Level 3',
+            'character_type' => 'pc'
         ]
     ];
 }
