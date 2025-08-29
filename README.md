@@ -27,7 +27,7 @@ Perfect for Dungeon Masters who want to focus on storytelling instead of spreads
 
 **Want to start using this right now? Follow these simple steps:**
 
-### 🐳 Option 1: Docker (Recommended for Most Users)
+### 🐳 Docker (Recommended for Most Users)
 
 The easiest way to get started! Works on Windows, Mac, and Linux.
 
