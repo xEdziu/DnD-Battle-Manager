@@ -166,16 +166,14 @@ function getBadgeDisplay($battle, $badges)
             didOpen: () => {
                 const badgeSelect = document.getElementById('badgeSelect');
                 const preview = document.getElementById('badgePreview');
-                const previewIcon = document.getElementById('previewIcon');
-                const previewText = document.getElementById('previewText');
 
                 function updatePreview() {
                     const selectedBadgeId = badgeSelect.value;
                     const selectedBadge = badges.find(b => b.id == selectedBadgeId);
 
                     if (selectedBadge) {
-                        previewText.textContent = selectedBadge.name;
-                        previewIcon.setAttribute('data-lucide', selectedBadge.icon);
+                        // Update the icon by replacing the entire preview content
+                        preview.innerHTML = `<i data-lucide="${selectedBadge.icon}" class="mr-1 h-3 w-3"></i><span>${selectedBadge.name}</span>`;
 
                         // Update preview classes based on color
                         const colorClasses = {

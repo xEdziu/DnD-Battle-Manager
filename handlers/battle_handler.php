@@ -99,7 +99,8 @@ class BattleHandler
             setError('Failed to update battle badge');
         }
 
-        redirect('index.php?battle=' . $battleId);
+        // Stay on the main battles list page instead of redirecting to battle detail
+        redirect('index.php');
     }
 
     private function updateBattleInfo()
