@@ -22,7 +22,7 @@ class Database
     private function connect()
     {
         $initNewDb = !file_exists(DB_FILE);
-        
+
         try {
             $this->db = new SQLite3(DB_FILE);
         } catch (Exception $e) {
@@ -111,6 +111,21 @@ class Database
         if (!$hasBadgeColumn) {
             $this->db->exec('ALTER TABLE battles ADD COLUMN badge_id INTEGER DEFAULT 1');
             $this->db->exec('CREATE INDEX IF NOT EXISTS idx_battles_badge_id ON battles(badge_id)');
+        }
+
+        // Check if participants table has is_hidden column
+        $result = $this->db->query("PRAGMA table_info(participants)");
+        $hasHiddenColumn = false;
+        while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+            if ($row['name'] === 'is_hidden') {
+                $hasHiddenColumn = true;
+                break;
+            }
+        }
+
+        if (!$hasHiddenColumn) {
+            $this->db->exec('ALTER TABLE participants ADD COLUMN is_hidden INTEGER DEFAULT 0');
+            $this->db->exec('CREATE INDEX IF NOT EXISTS idx_participants_hidden ON participants(battle_id, is_hidden)');
         }
 
         // Check if presets table has character_type column
@@ -318,7 +333,6 @@ class Database
             $this->db->exec('CREATE INDEX IF NOT EXISTS idx_battles_badge_id ON battles(badge_id)');
             $this->db->exec('CREATE INDEX IF NOT EXISTS idx_presets_character_type ON presets(character_type)');
             $this->db->exec('CREATE INDEX IF NOT EXISTS idx_participants_character_type ON participants(character_type)');
-
         } catch (Exception $e) {
             error_log("Failed to create database tables: " . $e->getMessage());
             throw $e;

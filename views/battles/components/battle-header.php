@@ -25,7 +25,7 @@ function renderBattleHeader($battle, $badges, $battleId)
                             <?= htmlspecialchars($battle['description']) ?>
                         </p>
                     <?php endif; ?>
-                    <p class="text-sm text-muted-foreground mt-1">
+                    <p class="text-sm text-muted-foreground mt-1" id="participants-count">
                         <?= count($battle['participants']) ?> participants in battle
                     </p>
                 </div>

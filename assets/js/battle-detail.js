@@ -3,7 +3,7 @@
 
 import { PresetFilter } from "./modules/preset-filter.js";
 import { InitiativeManager } from "./modules/initiative.js";
-import { ParticipantDetails } from "./modules/participant-details.js";
+// import { ParticipantDetails } from "./modules/participant-details.js"; // Disabled - using inline expandable rows
 import { ParticipantActions } from "./modules/participant-actions.js";
 
 class BattleDetailApp {
@@ -28,7 +28,7 @@ class BattleDetailApp {
       // Initialize UI modules
       this.modules.presetFilter = new PresetFilter();
       this.modules.initiative = new InitiativeManager();
-      this.modules.participantDetails = new ParticipantDetails();
+      // this.modules.participantDetails = new ParticipantDetails(); // Disabled - using inline expandable rows
       this.modules.participantActions = new ParticipantActions();
 
       // Initialize Lucide icons

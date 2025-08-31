@@ -163,4 +163,54 @@ class ParticipantManager
         $stmt->bindValue(':id', intval($participantId), SQLITE3_INTEGER);
         return $stmt->execute();
     }
+
+    public function hideParticipant($participantId, $battleId)
+    {
+        $db = Database::getInstance()->getConnection();
+        $stmt = $db->prepare("UPDATE participants 
+                              SET is_hidden = 1 
+                              WHERE id = :id AND battle_id = :battle_id");
+        $stmt->bindValue(':id', intval($participantId), SQLITE3_INTEGER);
+        $stmt->bindValue(':battle_id', intval($battleId), SQLITE3_INTEGER);
+        return $stmt->execute();
+    }
+
+    public function unhideParticipant($participantId, $battleId)
+    {
+        $db = Database::getInstance()->getConnection();
+        $stmt = $db->prepare("UPDATE participants 
+                              SET is_hidden = 0 
+                              WHERE id = :id AND battle_id = :battle_id");
+        $stmt->bindValue(':id', intval($participantId), SQLITE3_INTEGER);
+        $stmt->bindValue(':battle_id', intval($battleId), SQLITE3_INTEGER);
+        return $stmt->execute();
+    }
+
+    public function bulkHideParticipants($participantIds, $battleId)
+    {
+        $db = Database::getInstance()->getConnection();
+        $successCount = 0;
+
+        foreach ($participantIds as $participantId) {
+            if ($this->hideParticipant(intval($participantId), $battleId)) {
+                $successCount++;
+            }
+        }
+
+        return $successCount;
+    }
+
+    public function bulkUnhideParticipants($participantIds, $battleId)
+    {
+        $db = Database::getInstance()->getConnection();
+        $successCount = 0;
+
+        foreach ($participantIds as $participantId) {
+            if ($this->unhideParticipant(intval($participantId), $battleId)) {
+                $successCount++;
+            }
+        }
+
+        return $successCount;
+    }
 }

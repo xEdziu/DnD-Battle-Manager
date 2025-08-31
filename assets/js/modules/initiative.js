@@ -10,7 +10,11 @@ export class InitiativeManager {
   }
 
   init() {
-    if (this.rollButton) {
+    if (
+      this.rollButton &&
+      !this.rollButton.hasAttribute("data-listener-added")
+    ) {
+      this.rollButton.setAttribute("data-listener-added", "true");
       this.rollButton.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -18,7 +22,11 @@ export class InitiativeManager {
       });
     }
 
-    if (this.sortButton) {
+    if (
+      this.sortButton &&
+      !this.sortButton.hasAttribute("data-listener-added")
+    ) {
+      this.sortButton.setAttribute("data-listener-added", "true");
       this.sortButton.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -199,24 +207,36 @@ export class InitiativeManager {
   showRollResult(updatedCount) {
     if (updatedCount > 0) {
       Swal.fire({
-        title: "Initiative Rolled!",
-        text: `Updated and saved initiative for ${updatedCount} NPCs and Enemies. PCs should roll their own initiative.`,
+        title: `Initiative rolled for ${updatedCount} NPCs and Enemies!`,
         icon: "success",
-        timer: 2000,
+        toast: true,
+        position: "top-end",
         showConfirmButton: false,
+        showCancelButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        backdrop: false,
+        allowOutsideClick: true,
+        allowEscapeKey: true,
         customClass: {
-          confirmButton: "bg-dnd-emerald hover:bg-green-600 text-white",
+          popup: "colored-toast",
         },
       });
     } else {
       Swal.fire({
-        title: "No NPCs or Enemies",
-        text: "No NPCs or Enemies found to roll initiative for.",
+        title: "No NPCs or Enemies found to roll initiative for",
         icon: "info",
-        timer: 2000,
+        toast: true,
+        position: "top-end",
         showConfirmButton: false,
+        showCancelButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        backdrop: false,
+        allowOutsideClick: true,
+        allowEscapeKey: true,
         customClass: {
-          confirmButton: "bg-blue-600 hover:bg-blue-700 text-white",
+          popup: "colored-toast",
         },
       });
     }
@@ -224,26 +244,34 @@ export class InitiativeManager {
 
   showRollError(updatedCount) {
     Swal.fire({
-      title: "Initiative Rolled!",
-      text: `Initiative has been rolled for ${updatedCount} participants, but there was an error saving. Please save manually.`,
+      title: `Initiative rolled for ${updatedCount} participants, but there was an error saving`,
       icon: "warning",
-      timer: 3000,
+      toast: true,
+      position: "top-end",
       showConfirmButton: false,
+      timer: 4000,
+      timerProgressBar: true,
       customClass: {
-        confirmButton: "bg-orange-600 hover:bg-orange-700 text-white",
+        popup: "colored-toast",
       },
     });
   }
 
   showSortResult() {
     Swal.fire({
-      title: "Sorted!",
-      text: "Participants sorted by initiative (highest first).",
+      title: "Participants sorted by initiative (highest first)",
       icon: "success",
-      timer: 2000,
+      toast: true,
+      position: "top-end",
       showConfirmButton: false,
+      showCancelButton: false,
+      timer: 2000,
+      timerProgressBar: true,
+      backdrop: false,
+      allowOutsideClick: true,
+      allowEscapeKey: true,
       customClass: {
-        confirmButton: "bg-dnd-emerald hover:bg-green-600 text-white",
+        popup: "colored-toast",
       },
     });
   }

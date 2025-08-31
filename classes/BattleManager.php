@@ -72,13 +72,21 @@ class BattleManager
         $battle = $res->fetchArray(SQLITE3_ASSOC);
 
         if ($battle) {
-            // Get participants
-            $partsRes = $db->query("SELECT * FROM participants WHERE battle_id = " . intval($id));
+            // Get visible participants (not hidden)
+            $partsRes = $db->query("SELECT * FROM participants WHERE battle_id = " . intval($id) . " AND (is_hidden IS NULL OR is_hidden = 0)");
             $participants = [];
             while ($pr = $partsRes->fetchArray(SQLITE3_ASSOC)) {
                 $participants[] = $pr;
             }
             $battle['participants'] = $participants;
+
+            // Get hidden participants
+            $hiddenPartsRes = $db->query("SELECT * FROM participants WHERE battle_id = " . intval($id) . " AND is_hidden = 1");
+            $hiddenParticipants = [];
+            while ($pr = $hiddenPartsRes->fetchArray(SQLITE3_ASSOC)) {
+                $hiddenParticipants[] = $pr;
+            }
+            $battle['hidden_participants'] = $hiddenParticipants;
 
             // Get badge information
             if ($battle['badge_id']) {

@@ -1,38 +1,37 @@
 <?php
-// Participants Table Component
-// The main table with all participants
+// Hidden Participants Table Component
+// Table for participants that are currently hidden
 
-function renderParticipantsTable($participants, $battleId)
+function renderHiddenParticipantsTable($hiddenParticipants, $battleId)
 {
+    if (empty($hiddenParticipants)) {
+        return; // Don't render anything if no hidden participants
+    }
 ?>
-    <div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm">
+    <div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm mt-6">
         <div class="flex flex-col space-y-1.5 p-6 pb-4">
             <div class="flex items-center justify-between">
                 <h3 class="text-lg font-semibold leading-none tracking-tight flex items-center">
-                    <i data-lucide="users" class="mr-2 h-5 w-5 text-dnd-royal"></i>
-                    Battle Participants
+                    <i data-lucide="eye-off" class="mr-2 h-5 w-5 text-muted-foreground"></i>
+                    Hidden Participants
+                    <span class="ml-2 text-sm text-muted-foreground">(<?= count($hiddenParticipants) ?>)</span>
                 </h3>
                 <div class="flex items-center space-x-2">
-                    <button id="sortByInit" type="button"
+                    <button id="unhideAllBtn" type="button"
                         class="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 px-3">
-                        <i data-lucide="arrow-up-down" class="mr-1 h-3 w-3"></i>
-                        Sort by Initiative
-                    </button>
-                    <button id="rollInitiative" type="button"
-                        class="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 px-3">
-                        <i data-lucide="shuffle" class="mr-1 h-3 w-3"></i>
-                        Roll Initiative
+                        <i data-lucide="eye" class="mr-1 h-3 w-3"></i>
+                        Unhide All
                     </button>
                 </div>
             </div>
         </div>
         <div class="p-6 pt-0">
             <div class="rounded-md border border-border overflow-hidden">
-                <table class="w-full caption-bottom text-sm" id="participants-table">
+                <table class="w-full caption-bottom text-sm" id="hidden-participants-table">
                     <thead class="[&_tr]:border-b">
                         <tr class="border-b border-border transition-colors hover:bg-muted/50">
                             <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                                <input type="checkbox" id="selectAll"
+                                <input type="checkbox" id="selectAllHidden"
                                     class="h-4 w-4 shrink-0 rounded-sm border border-primary">
                             </th>
                             <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
@@ -61,13 +60,13 @@ function renderParticipantsTable($participants, $battleId)
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($participants as $participant):
+                        <?php foreach ($hiddenParticipants as $participant):
                             $isDead = $participant['hp_current'] <= 0;
                             $hpPercentage = $participant['hp_max'] > 0 ? ($participant['hp_current'] / $participant['hp_max']) * 100 : 0;
                             $hpColor = $hpPercentage > 75 ? 'text-dnd-emerald' : ($hpPercentage > 25 ? 'text-dnd-gold' : 'text-dnd-crimson');
                         ?>
-                            <tr id="participant-row-<?= $participant['id'] ?>"
-                                class="participant-row border-b border-border hover:bg-muted/50 transition-colors cursor-pointer <?= $isDead ? 'opacity-50 bg-destructive/5' : '' ?>"
+                            <tr id="hidden-participant-row-<?= $participant['id'] ?>"
+                                class="hidden-participant-row border-b border-border hover:bg-muted/50 transition-colors cursor-pointer opacity-75 bg-muted/20 <?= $isDead ? 'opacity-50 bg-destructive/5' : '' ?>"
                                 data-participant-type="<?= $participant['character_type'] ?? 'enemy' ?>"
                                 data-participant-id="<?= $participant['id'] ?>"
                                 data-participant-name="<?= h($participant['name']) ?>"
@@ -86,8 +85,8 @@ function renderParticipantsTable($participants, $battleId)
                                 data-participant-passive="<?= $participant['passive'] ?>"
                                 title="Click to view details">
                                 <td class="p-4 align-middle">
-                                    <input type="checkbox" name="selected" value="<?= $participant['id'] ?>"
-                                        class="participant-checkbox h-4 w-4 shrink-0 rounded-sm border border-primary"
+                                    <input type="checkbox" name="selectedHidden" value="<?= $participant['id'] ?>"
+                                        class="hidden-participant-checkbox h-4 w-4 shrink-0 rounded-sm border border-primary"
                                         onclick="event.stopPropagation()">
                                 </td>
                                 <td class="p-4 align-middle">
@@ -106,10 +105,8 @@ function renderParticipantsTable($participants, $battleId)
                                         ?>
                                             <i data-lucide="<?= $config['icon'] ?>" class="h-4 w-4 <?= $config['color'] ?>"></i>
                                         <?php endif; ?>
-                                        <input type="text" name="name[<?= $participant['id'] ?>]"
-                                            value="<?= h($participant['name']) ?>"
-                                            class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring <?= $isDead ? 'bg-destructive/10 text-destructive' : '' ?>"
-                                            onclick="event.stopPropagation()">
+                                        <i data-lucide="eye-off" class="h-3 w-3 text-muted-foreground mr-1" title="Hidden"></i>
+                                        <span class="text-sm text-muted-foreground"><?= h($participant['name']) ?></span>
                                     </div>
                                 </td>
                                 <td class="p-4 align-middle text-center">
@@ -146,20 +143,19 @@ function renderParticipantsTable($participants, $battleId)
                                     </div>
                                 </td>
                                 <td class="p-4 align-middle text-center">
-                                    <input type="number" name="init[<?= $participant['id'] ?>]"
-                                        value="<?= $participant['initiative'] ?>"
-                                        class="initiative-input flex h-9 w-16 rounded-md border border-input bg-transparent px-2 py-1 text-sm text-center shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                                        onclick="event.stopPropagation()">
+                                    <div class="text-sm text-muted-foreground">
+                                        <?= $participant['initiative'] ?>
+                                    </div>
                                 </td>
                                 <td class="p-4 align-middle text-center">
                                     <div class="flex items-center justify-center space-x-1">
                                         <button type="button"
-                                            class="hide-participant-btn inline-flex items-center justify-center rounded-md h-8 w-8 border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
+                                            class="unhide-participant-btn inline-flex items-center justify-center rounded-md h-8 w-8 border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
                                             data-participant-id="<?= $participant['id'] ?>"
                                             data-participant-name="<?= h($participant['name']) ?>"
                                             data-battle-id="<?= $battleId ?>"
-                                            title="Hide participant">
-                                            <i data-lucide="eye-off" class="h-3 w-3"></i>
+                                            title="Unhide participant">
+                                            <i data-lucide="eye" class="h-3 w-3"></i>
                                         </button>
                                         <button type="button"
                                             class="delete-participant-btn inline-flex items-center justify-center rounded-md h-8 w-8 border border-input bg-background hover:bg-destructive hover:text-destructive-foreground transition-colors"

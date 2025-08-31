@@ -42,6 +42,12 @@ class BattleHandler
             case 'heal':
                 $this->updateHP();
                 break;
+            case 'hide_participant':
+                $this->hideParticipant();
+                break;
+            case 'unhide_participant':
+                $this->unhideParticipant();
+                break;
         }
     }
 
@@ -199,6 +205,44 @@ class BattleHandler
         $successCount = 0;
         foreach ($participantIds as $participantId) {
             $result = $this->participantManager->updateParticipantHP($participantId, $battleId, $action, $amount);
+            if ($result) {
+                $successCount++;
+            }
+        }
+
+        redirect('index.php?battle=' . $battleId);
+    }
+
+    private function hideParticipant()
+    {
+        // Support both single and bulk hiding
+        $participantIds = isset($_POST['participant_ids']) ?
+            array_map('intval', explode(',', $_POST['participant_ids'])) :
+            [intval($_POST['participant_id'])];
+        $battleId = intval($_POST['battle_id']);
+
+        $successCount = 0;
+        foreach ($participantIds as $participantId) {
+            $result = $this->participantManager->hideParticipant($participantId, $battleId);
+            if ($result) {
+                $successCount++;
+            }
+        }
+
+        redirect('index.php?battle=' . $battleId);
+    }
+
+    private function unhideParticipant()
+    {
+        // Support both single and bulk unhiding
+        $participantIds = isset($_POST['participant_ids']) ?
+            array_map('intval', explode(',', $_POST['participant_ids'])) :
+            [intval($_POST['participant_id'])];
+        $battleId = intval($_POST['battle_id']);
+
+        $successCount = 0;
+        foreach ($participantIds as $participantId) {
+            $result = $this->participantManager->unhideParticipant($participantId, $battleId);
             if ($result) {
                 $successCount++;
             }
