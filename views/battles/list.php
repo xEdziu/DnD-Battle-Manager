@@ -226,9 +226,15 @@ function getBadgeDisplay($battle, $badges)
                 badgeIdInput.name = 'badge_id';
                 badgeIdInput.value = result.value;
 
+                const sourceInput = document.createElement('input');
+                sourceInput.type = 'hidden';
+                sourceInput.name = 'source';
+                sourceInput.value = 'battle_list';
+
                 form.appendChild(actionInput);
                 form.appendChild(battleIdInput);
                 form.appendChild(badgeIdInput);
+                form.appendChild(sourceInput);
 
                 document.body.appendChild(form);
                 form.submit();

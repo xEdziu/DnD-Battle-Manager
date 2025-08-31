@@ -92,6 +92,7 @@ class BattleHandler
     {
         $battleId = intval($_POST['battle_id']);
         $badgeId = intval($_POST['badge_id']);
+        $source = $_POST['source'] ?? '';
 
         if ($this->battleManager->updateBattleBadge($battleId, $badgeId)) {
             setSuccess('Battle badge updated successfully');
@@ -99,8 +100,14 @@ class BattleHandler
             setError('Failed to update battle badge');
         }
 
-        // Stay on the main battles list page instead of redirecting to battle detail
-        redirect('index.php');
+        // Redirect based on source context
+        if ($source === 'battle_detail') {
+            // If called from battle detail page, stay in battle detail
+            redirect('index.php?battle=' . $battleId);
+        } else {
+            // If called from main battles list, stay on main page
+            redirect('index.php');
+        }
     }
 
     private function updateBattleInfo()
