@@ -6,6 +6,6 @@ contact_links:
   - name: 🆘 Community Support
     url: https://github.com/xEdziu/DnD-Battle-Manager/discussions/categories/q-a
     about: Get help from community members
-  - name: 🏗️ Architecture Questions
+  - name: 🏗️ Development
     url: https://github.com/xEdziu/DnD-Battle-Manager/discussions/categories/development
-    about: Discuss Clean Architecture implementation and technical decisions
+    about: Discuss current state of work and development progress
