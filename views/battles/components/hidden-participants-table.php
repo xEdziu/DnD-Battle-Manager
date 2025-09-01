@@ -82,8 +82,7 @@ function renderHiddenParticipantsTable($hiddenParticipants, $battleId)
                                 data-participant-int="<?= $participant['int'] ?>"
                                 data-participant-wis="<?= $participant['wis'] ?>"
                                 data-participant-cha="<?= $participant['cha'] ?>"
-                                data-participant-passive="<?= $participant['passive'] ?>"
-                                title="Click to view details">
+                                data-participant-passive="<?= $participant['passive'] ?>" title="Click to view details">
                                 <td class="p-4 align-middle">
                                     <input type="checkbox" name="selectedHidden" value="<?= $participant['id'] ?>"
                                         class="hidden-participant-checkbox h-4 w-4 shrink-0 rounded-sm border border-primary"
@@ -110,7 +109,8 @@ function renderHiddenParticipantsTable($hiddenParticipants, $battleId)
                                     </div>
                                 </td>
                                 <td class="p-4 align-middle text-center">
-                                    <div class="inline-flex items-center rounded-full border px-2 py-1 text-xs font-semibold bg-secondary text-secondary-foreground">
+                                    <div
+                                        class="inline-flex items-center rounded-full border px-2 py-1 text-xs font-semibold bg-secondary text-secondary-foreground">
                                         <?= $participant['ac'] ?>
                                     </div>
                                 </td>
@@ -138,7 +138,8 @@ function renderHiddenParticipantsTable($hiddenParticipants, $battleId)
                                     </td>
                                 <?php endforeach; ?>
                                 <td class="p-4 align-middle text-center">
-                                    <div class="inline-flex items-center rounded-full border px-2 py-1 text-xs font-semibold bg-accent text-accent-foreground">
+                                    <div
+                                        class="inline-flex items-center rounded-full border px-2 py-1 text-xs font-semibold bg-accent text-accent-foreground">
                                         <?= $participant['passive'] ?>
                                     </div>
                                 </td>
@@ -153,16 +154,14 @@ function renderHiddenParticipantsTable($hiddenParticipants, $battleId)
                                             class="unhide-participant-btn inline-flex items-center justify-center rounded-md h-8 w-8 border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
                                             data-participant-id="<?= $participant['id'] ?>"
                                             data-participant-name="<?= h($participant['name']) ?>"
-                                            data-battle-id="<?= $battleId ?>"
-                                            title="Unhide participant">
+                                            data-battle-id="<?= $battleId ?>" title="Unhide participant">
                                             <i data-lucide="eye" class="h-3 w-3"></i>
                                         </button>
                                         <button type="button"
                                             class="delete-participant-btn inline-flex items-center justify-center rounded-md h-8 w-8 border border-input bg-background hover:bg-destructive hover:text-destructive-foreground transition-colors"
                                             data-participant-id="<?= $participant['id'] ?>"
                                             data-participant-name="<?= h($participant['name']) ?>"
-                                            data-battle-id="<?= $battleId ?>"
-                                            title="Remove participant">
+                                            data-battle-id="<?= $battleId ?>" title="Remove participant">
                                             <i data-lucide="trash-2" class="h-3 w-3"></i>
                                         </button>
                                     </div>
