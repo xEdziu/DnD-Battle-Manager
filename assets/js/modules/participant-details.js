@@ -39,6 +39,7 @@ export class ParticipantDetails {
       wis: row.dataset.participantWis,
       cha: row.dataset.participantCha,
       passive: row.dataset.participantPassive,
+      initiative: row.dataset.participantInitiative,
       type: row.dataset.participantType,
     };
   }
@@ -132,6 +133,12 @@ export class ParticipantDetails {
                             <span class="font-medium">Passive Perception:</span>
                             <span class="bg-gray-100 px-2 py-1 rounded text-sm font-semibold">${
                               participant.passive
+                            }</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="font-medium">Initiative:</span>
+                            <span class="bg-gray-100 px-2 py-1 rounded text-sm font-semibold">${
+                              participant.initiative || 0
                             }</span>
                         </div>
                     </div>

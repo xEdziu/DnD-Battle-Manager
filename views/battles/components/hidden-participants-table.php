@@ -82,7 +82,8 @@ function renderHiddenParticipantsTable($hiddenParticipants, $battleId)
                                 data-participant-int="<?= $participant['int'] ?>"
                                 data-participant-wis="<?= $participant['wis'] ?>"
                                 data-participant-cha="<?= $participant['cha'] ?>"
-                                data-participant-passive="<?= $participant['passive'] ?>" title="Click to view details">
+                                data-participant-passive="<?= $participant['passive'] ?>"
+                                data-participant-initiative="<?= $participant['initiative'] ?>" title="Click to view details">
                                 <td class="p-4 align-middle">
                                     <input type="checkbox" name="selectedHidden" value="<?= $participant['id'] ?>"
                                         class="hidden-participant-checkbox h-4 w-4 shrink-0 rounded-sm border border-primary"

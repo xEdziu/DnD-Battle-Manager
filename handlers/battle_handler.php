@@ -101,7 +101,7 @@ class BattleHandler
         $source = $_POST['source'] ?? '';
 
         if ($this->battleManager->updateBattleBadge($battleId, $badgeId)) {
-            setSuccess('Battle badge updated successfully');
+            // Badge updated successfully - no notification needed
         } else {
             setError('Failed to update battle badge');
         }

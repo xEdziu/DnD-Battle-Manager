@@ -84,6 +84,7 @@ function renderParticipantsTable($participants, $battleId)
                                 data-participant-wis="<?= $participant['wis'] ?>"
                                 data-participant-cha="<?= $participant['cha'] ?>"
                                 data-participant-passive="<?= $participant['passive'] ?>"
+                                data-participant-initiative="<?= $participant['initiative'] ?>"
                                 title="Click to view details">
                                 <td class="p-4 align-middle">
                                     <input type="checkbox" name="selected" value="<?= $participant['id'] ?>"

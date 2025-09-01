@@ -264,6 +264,7 @@ $hiddenParticipants = $battle['hidden_participants'] ?? [];
                     wis: this.dataset.participantWis,
                     cha: this.dataset.participantCha,
                     passive: this.dataset.participantPassive,
+                    initiative: this.dataset.participantInitiative,
                     type: this.dataset.participantType
                 };
 
@@ -295,6 +296,7 @@ $hiddenParticipants = $battle['hidden_participants'] ?? [];
                     wis: this.dataset.participantWis,
                     cha: this.dataset.participantCha,
                     passive: this.dataset.participantPassive,
+                    initiative: this.dataset.participantInitiative,
                     type: this.dataset.participantType
                 };
 
@@ -488,9 +490,13 @@ $hiddenParticipants = $battle['hidden_participants'] ?? [];
                                         <div class="text-xs font-medium text-gray-500">HP</div>
                                         <div class="text-lg font-bold ${hpColor}">${participant.hpCurrent}/${participant.hpMax}</div>
                                     </div>
-                                    <div class="bg-white rounded-lg p-3 border col-span-2">
+                                    <div class="bg-white rounded-lg p-3 border">
                                         <div class="text-xs font-medium text-gray-500">Passive Perception</div>
                                         <div class="text-lg font-bold">${participant.passive}</div>
+                                    </div>
+                                    <div class="bg-white rounded-lg p-3 border">
+                                        <div class="text-xs font-medium text-gray-500">Initiative</div>
+                                        <div class="text-lg font-bold">${participant.initiative || 0}</div>
                                     </div>
                                 </div>
                             </div>
