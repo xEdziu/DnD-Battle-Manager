@@ -50,7 +50,8 @@ function getDefaultPresets()
             'passive' => 9,
             'skills' => 'Stealth +6',
             'actions' => 'Scimitar (melee attack +4, 1d6+2 damage); Shortbow (ranged attack +4, 1d6+2 damage)',
-            'notes' => 'Small humanoid, cunning and stealthy.'
+            'notes' => 'Small humanoid, cunning and stealthy.',
+            'character_type' => 'enemy'
         ],
         [
             'id' => 0,
@@ -66,7 +67,8 @@ function getDefaultPresets()
             'passive' => 13,
             'skills' => 'Perception +5',
             'actions' => 'Bite (melee attack +4, 2d4+2 piercing damage, chance to knock prone)',
-            'notes' => 'Medium beast, often fights in packs.'
+            'notes' => 'Medium beast, often fights in packs.',
+            'character_type' => 'enemy'
         ],
         [
             'id' => 0,
