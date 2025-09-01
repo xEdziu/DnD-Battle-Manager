@@ -130,7 +130,7 @@ This project is licensed under the MIT License - free to use, modify, and distri
 ## 🛠️ Local Setup (For Developers)
 
 > [!NOTE]
-> Whole this repository was created in a one night stand (as of 28.07.2025) - I was using a hella lot of AI help to develop this project. It is not a secret that AI played a significant role in its development.
+> It is not a secret that AI played a significant role in development of this app.
 
 **For developers who want to contribute, modify the code, or build from source:**
 
