@@ -23,6 +23,9 @@ class PresetHandler
             case 'delete_preset':
                 $this->deletePreset();
                 break;
+            case 'clone_preset':
+                $this->clonePreset();
+                break;
         }
     }
 
@@ -46,6 +49,18 @@ class PresetHandler
         $presetId = intval($_GET['id']);
         $this->presetManager->deletePreset($presetId);
         redirect('index.php?page=presets');
+    }
+
+    private function clonePreset()
+    {
+        $presetId = intval($_GET['id']);
+        $clonedId = $this->presetManager->clonePreset($presetId);
+        if ($clonedId) {
+            // Redirect to editing the cloned preset
+            redirect('index.php?page=presets&edit_id=' . $clonedId);
+        } else {
+            redirect('index.php?page=presets');
+        }
     }
 
     private function collectPresetData()

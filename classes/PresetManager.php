@@ -40,6 +40,23 @@ class PresetManager
         $db->exec("DELETE FROM presets WHERE id = " . intval($id));
     }
 
+    public function clonePreset($id)
+    {
+        // Get the original preset
+        $originalPreset = $this->getPresetById($id);
+        if (!$originalPreset) {
+            return false;
+        }
+
+        // Prepare data for cloning
+        $cloneData = $originalPreset;
+        unset($cloneData['id']); // Remove the ID so a new one will be generated
+        $cloneData['name'] = $cloneData['name'] . ' (Copy)'; // Add suffix to distinguish the copy
+
+        // Create the clone
+        return $this->createPresetInSqlite($cloneData);
+    }
+
     public function initializeDefaultPresets()
     {
         $db = Database::getInstance()->getConnection();

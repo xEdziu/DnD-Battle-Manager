@@ -16,7 +16,8 @@ if (isset($_GET['edit_id'])) {
         <h2 class="text-3xl font-bold tracking-tight">Character Presets</h2>
         <p class="text-muted-foreground">Create and manage reusable character templates</p>
     </div>
-    <a href="index.php" class="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+    <a href="index.php"
+        class="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
         <i data-lucide="arrow-left" class="mr-2 h-4 w-4"></i>
         Back to Battles
     </a>
@@ -114,23 +115,28 @@ if (isset($_GET['edit_id'])) {
                             ];
                             $config = $typeConfig[$characterType] ?? $typeConfig['enemy'];
                         ?>
-                            <tr class="preset-row border-b border-border hover:bg-muted/50 transition-colors" data-character-type="<?= $characterType ?>">
+                            <tr class="preset-row border-b border-border hover:bg-muted/50 transition-colors"
+                                data-character-type="<?= $characterType ?>">
                                 <td class="p-4 align-middle">
                                     <div class="flex items-center space-x-3">
                                         <div class="flex items-center space-x-1">
-                                            <i data-lucide="<?= $config['icon'] ?>" class="h-4 w-4 text-<?= $config['color'] ?>"></i>
-                                            <span class="text-xs font-medium text-<?= $config['color'] ?>"><?= $config['name'] ?></span>
+                                            <i data-lucide="<?= $config['icon'] ?>"
+                                                class="h-4 w-4 text-<?= $config['color'] ?>"></i>
+                                            <span
+                                                class="text-xs font-medium text-<?= $config['color'] ?>"><?= $config['name'] ?></span>
                                         </div>
                                         <span class="font-medium"><?= h($preset['name']) ?></span>
                                     </div>
                                 </td>
                                 <td class="p-4 align-middle text-center">
-                                    <div class="inline-flex items-center rounded-full border px-2 py-1 text-xs font-semibold bg-secondary text-secondary-foreground">
+                                    <div
+                                        class="inline-flex items-center rounded-full border px-2 py-1 text-xs font-semibold bg-secondary text-secondary-foreground">
                                         <?= $preset['ac'] ?>
                                     </div>
                                 </td>
                                 <td class="p-4 align-middle text-center">
-                                    <div class="inline-flex items-center rounded-full border px-2 py-1 text-xs font-semibold bg-dnd-crimson/10 text-dnd-crimson">
+                                    <div
+                                        class="inline-flex items-center rounded-full border px-2 py-1 text-xs font-semibold bg-dnd-crimson/10 text-dnd-crimson">
                                         <?= h($preset['hp']) ?>
                                     </div>
                                 </td>
@@ -152,7 +158,8 @@ if (isset($_GET['edit_id'])) {
                                         ?>
                                             <div class="flex items-center justify-between bg-muted rounded px-2 py-1">
                                                 <div class="flex items-center space-x-1">
-                                                    <i data-lucide="<?= $details['icon'] ?>" class="h-3 w-3 <?= $details['color'] ?>"></i>
+                                                    <i data-lucide="<?= $details['icon'] ?>"
+                                                        class="h-3 w-3 <?= $details['color'] ?>"></i>
                                                     <span class="font-medium text-muted-foreground"><?= $details['name'] ?></span>
                                                 </div>
                                                 <span class="font-bold"><?= $modifier ?></span>
@@ -163,11 +170,19 @@ if (isset($_GET['edit_id'])) {
                                 <td class="p-4 align-middle text-center">
                                     <div class="flex justify-center space-x-2">
                                         <a href="index.php?page=presets&edit_id=<?= $preset['id'] ?>"
-                                            class="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 w-8">
+                                            class="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 w-8"
+                                            title="Edit preset">
                                             <i data-lucide="edit" class="h-4 w-4"></i>
                                         </a>
+                                        <a href="index.php?page=presets&action=clone_preset&id=<?= $preset['id'] ?>"
+                                            class="clone-preset-link inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-blue-50 hover:text-blue-600 h-8 w-8"
+                                            title="Clone preset">
+                                            <i data-lucide="copy" class="h-4 w-4"></i>
+                                        </a>
                                         <a href="index.php?page=presets&action=delete_preset&id=<?= $preset['id'] ?>"
-                                            class="delete-preset-link inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-destructive hover:text-destructive-foreground h-8 w-8">
+                                            class="delete-preset-link inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-destructive hover:text-destructive-foreground h-8 w-8"
+                                            title="Delete preset"
+                                            data-preset-name="<?= h($preset['name']) ?>">
                                             <i data-lucide="trash-2" class="h-4 w-4"></i>
                                         </a>
                                     </div>
@@ -275,12 +290,16 @@ if (isset($_GET['edit_id'])) {
                     ?>
 
                     <?php foreach ($characterTypes as $type => $info): ?>
-                        <label class="character-type-option relative flex cursor-pointer rounded-lg border p-4 hover:bg-accent/50 transition-colors <?= $currentType === $type ? 'border-emerald-500 bg-emerald-50' : 'border-input' ?>" data-type="<?= $type ?>">
+                        <label
+                            class="character-type-option relative flex cursor-pointer rounded-lg border p-4 hover:bg-accent/50 transition-colors <?= $currentType === $type ? 'border-emerald-500 bg-emerald-50' : 'border-input' ?>"
+                            data-type="<?= $type ?>">
                             <input type="radio" name="character_type" value="<?= $type ?>"
                                 class="sr-only character-type-radio" <?= $currentType === $type ? 'checked' : '' ?>>
                             <div class="flex items-start space-x-3">
-                                <div class="flex h-8 w-8 items-center justify-center rounded-full <?= $type === 'pc' ? 'bg-emerald-100' : ($type === 'npc' ? 'bg-blue-100' : 'bg-red-100') ?>">
-                                    <i data-lucide="<?= $info['icon'] ?>" class="h-4 w-4 <?= $type === 'pc' ? 'text-emerald-600' : ($type === 'npc' ? 'text-blue-600' : 'text-red-600') ?>"></i>
+                                <div
+                                    class="flex h-8 w-8 items-center justify-center rounded-full <?= $type === 'pc' ? 'bg-emerald-100' : ($type === 'npc' ? 'bg-blue-100' : 'bg-red-100') ?>">
+                                    <i data-lucide="<?= $info['icon'] ?>"
+                                        class="h-4 w-4 <?= $type === 'pc' ? 'text-emerald-600' : ($type === 'npc' ? 'text-blue-600' : 'text-red-600') ?>"></i>
                                 </div>
                                 <div class="flex-1">
                                     <div class="font-medium text-sm"><?= $info['name'] ?></div>
@@ -419,7 +438,8 @@ if (isset($_GET['edit_id'])) {
                 // Uncheck all radios and remove active styling
                 characterTypeRadios.forEach(r => r.checked = false);
                 characterTypeOptions.forEach(opt => {
-                    opt.classList.remove('border-emerald-500', 'bg-emerald-50', 'border-blue-500', 'bg-blue-50', 'border-red-500', 'bg-red-50');
+                    opt.classList.remove('border-emerald-500', 'bg-emerald-50',
+                        'border-blue-500', 'bg-blue-50', 'border-red-500', 'bg-red-50');
                     opt.classList.add('border-input');
                 });
 
@@ -447,7 +467,8 @@ if (isset($_GET['edit_id'])) {
 
                 // Update button states
                 filterButtons.forEach(btn => {
-                    btn.classList.remove('active', 'bg-background', 'text-foreground', 'shadow-sm');
+                    btn.classList.remove('active', 'bg-background', 'text-foreground',
+                        'shadow-sm');
                     btn.classList.add('hover:bg-background/80');
                 });
 

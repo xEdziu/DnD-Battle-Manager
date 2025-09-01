@@ -28,7 +28,7 @@ $presetManager->initializeDefaultPresets();
 $action = $_POST['action'] ?? $_GET['action'] ?? '';
 
 // Route to appropriate handler
-if (in_array($action, ['add_preset', 'edit_preset', 'delete_preset'])) {
+if (in_array($action, ['add_preset', 'edit_preset', 'delete_preset', 'clone_preset'])) {
     $presetHandler->handle();
 } elseif (in_array($action, ['create_battle', 'delete_battle', 'update_battle', 'update_battle_info', 'update_battle_badge', 'add_participant', 'remove_participant', 'damage', 'heal'])) {
     $battleHandler->handle();
